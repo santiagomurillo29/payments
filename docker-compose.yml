@@ -1,0 +1,16 @@
+services:
+
+  postgres:
+    image: postgres:13.5
+    restart: always
+    environment:
+      POSTGRES_USER: userPayment
+      POSTGRES_PASSWORD: passwordPayment
+      POSTGRES_DB: dbPayment
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5498:5432'
+
+volumes:
+  postgres:
