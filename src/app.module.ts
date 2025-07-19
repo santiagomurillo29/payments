@@ -6,11 +6,19 @@ import { ProductRepository } from './payments/adapters/outgoing/prisma/repositor
 import { CustomerRepository } from './payments/adapters/outgoing/prisma/repository/customer.repository';
 import { CustomerController } from './payments/adapters/incoming/rest/controller/customer.controller';
 import { CustomerUseCase } from './payments/domain/usecase/customer.usecase';
+import { HttpModule } from '@nestjs/axios';
+import { TransactionRepository } from './payments/adapters/outgoing/prisma/repository/transaction.repository';
+import { TransactionController } from './payments/adapters/incoming/rest/controller/transaction.controller';
+import { TransactionUseCase } from './payments/domain/usecase/transaction.usecase';
+import { WompiAdapter } from './payments/adapters/outgoing/wompi/wompi-adapter';
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [ProductsController, CustomerController],
-  providers: [ProductsUseCase, CustomerUseCase,
+  imports: [
+    PrismaModule,
+    HttpModule.register({ timeout: 5000 }),
+  ],
+  controllers: [ProductsController, CustomerController, TransactionController],
+  providers: [ProductsUseCase, CustomerUseCase, TransactionUseCase,
     {
       provide: 'ProductRepoPort',
       useClass: ProductRepository,
@@ -18,6 +26,14 @@ import { CustomerUseCase } from './payments/domain/usecase/customer.usecase';
     {
       provide: 'CustomerRepoPort',
       useClass: CustomerRepository,
+    },
+    {
+      provide: 'TransactionRepoPort',
+      useClass: TransactionRepository,
+    },
+    {
+      provide: 'WompiPort',
+      useClass: WompiAdapter,
     }
   ],
 })

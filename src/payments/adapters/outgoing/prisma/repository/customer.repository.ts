@@ -7,6 +7,22 @@ import { Customer } from "src/payments/domain/model/customer.entity";
 export class CustomerRepository implements CustomerRepoPort {
     
     constructor(private readonly prisma: PrismaService) {}
+    
+    async findById(id: string): Promise<Customer | null> {
+        const dbCustomer = await this.prisma.customers.findUnique({
+            where: { id },
+        });
+        if (!dbCustomer) {
+            return null;
+        }
+        return new Customer(
+            dbCustomer.id,
+            dbCustomer.name,
+            dbCustomer.email,
+            dbCustomer.address,
+            dbCustomer.city
+        );
+    }
 
     async findMany(): Promise<Customer[]> {
         const dbCustomers = await this.prisma.customers.findMany();

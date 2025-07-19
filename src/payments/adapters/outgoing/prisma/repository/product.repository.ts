@@ -7,6 +7,23 @@ import { Product } from "src/payments/domain/model/product.entity";
 export class ProductRepository implements ProductRepoPort {
     
     constructor(private readonly prisma: PrismaService) {}
+    
+    async findById(id: string): Promise<Product | null> {
+        const dbProduct = await this.prisma.products.findUnique({ 
+            where: { id } 
+        });
+
+        if (!dbProduct) {
+            return null;
+        }
+        return new Product(
+            dbProduct.id,
+            dbProduct.name,
+            dbProduct.description,
+            +dbProduct.price,
+            dbProduct.stock
+        );
+    }
 
     async findMany(): Promise<Product[]> {
         const dbProducts = await this.prisma.products.findMany();
