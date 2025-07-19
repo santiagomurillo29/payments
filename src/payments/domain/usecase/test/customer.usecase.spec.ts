@@ -9,6 +9,7 @@ describe('CustomerUseCase', () => {
     beforeEach(() => {
         repoMock = {
             findMany: jest.fn(),
+            findById: jest.fn(),
             saveCustomer: jest.fn(),
         };
         useCase = new CustomerUseCase(repoMock);

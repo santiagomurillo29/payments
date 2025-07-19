@@ -9,6 +9,7 @@ describe('ProductsUseCase', () => {
     beforeEach(() => {
         repoMock = {
             findMany: jest.fn(),
+            findById: jest.fn(),
             updateStock: jest.fn(),
         };
         useCase = new ProductsUseCase(repoMock);
