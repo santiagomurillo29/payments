@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionStatus {
+  PENDING
+  APPROVED
+  DECLINED
+}
+
+enum DeliveryStatus {
+  PENDING
+  IN_PROGRESS
+  DELIVERED
+}
+
+model Products {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(255) @unique
+  description String   @db.VarChar(255)
+  price       Decimal  
+  stock       Int      @default(0)
+  createAt    DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  transactions Transactions[]
+}
+
+model Customers {
+  id         String   @id @default(uuid())
+  name       String   @db.VarChar(255)
+  email      String   @db.VarChar(255)
+  address    String
+  city       String   @db.VarChar(100)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  transactions Transactions[]
+}
+
+model Transactions {
+  id                  String           @id @default(uuid())
+  customerId          String
+  productId          String
+  quantity            Int              @default(1)
+  baseFee            Decimal          
+  deliveryFee        Decimal          
+  totalAmount        Decimal          
+  status              TransactionStatus @default(PENDING)
+  wompiTransactionId  String?         
+  referenceCode       String           @unique
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  customer            Customers        @relation(fields: [customerId], references: [id])
+  product             Products         @relation(fields: [productId], references: [id])
+  deliveries          Deliveries?
+}
+
+model Deliveries {
+  id               String         @id @default(uuid())
+  transactionId     String         @unique
+  deliveryAddress   String
+  deliveryStatus    DeliveryStatus @default(PENDING)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  transaction      Transactions   @relation(fields: [transactionId], references: [id])
+}
