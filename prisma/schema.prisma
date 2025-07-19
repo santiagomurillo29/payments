@@ -23,7 +23,7 @@ model Products {
   id          String   @id @default(uuid())
   name        String   @db.VarChar(255) @unique
   description String   @db.VarChar(255)
-  price       Decimal  
+  price       Decimal  @db.Decimal(10, 2)
   stock       Int      @default(0)
   createAt    DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -34,8 +34,8 @@ model Products {
 model Customers {
   id         String   @id @default(uuid())
   name       String   @db.VarChar(255)
-  email      String   @db.VarChar(255)
-  address    String
+  email      String   @db.VarChar(255) @unique
+  address    String   @db.VarChar(255)
   city       String   @db.VarChar(100)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

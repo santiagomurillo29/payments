@@ -1,6 +1,6 @@
-import { ProductsUseCase } from './product.usecase';
-import { ProductRepoPort } from '../port/outgoing/product-repo.port';
-import { Product } from '../model/product.entity';
+import { ProductsUseCase } from '../product.usecase'; 
+import { ProductRepoPort } from '../../port/outgoing/product-repo.port';
+import { Product } from '../../model/product.entity';
 
 describe('ProductsUseCase', () => {
     let useCase: ProductsUseCase;
