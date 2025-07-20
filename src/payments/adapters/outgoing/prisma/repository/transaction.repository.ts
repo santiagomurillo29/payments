@@ -10,6 +10,7 @@ import { TransactionStatus } from "@prisma/client";
 export class TransactionRepository implements TransactionRepoPort {
     
     constructor(private readonly prisma: PrismaService) {}
+    
     async findById(id: string): Promise<Transaction> {
         const dbTransaction = await this.prisma.transactions.findUnique({
             where: { id },
@@ -48,7 +49,6 @@ export class TransactionRepository implements TransactionRepoPort {
                     baseFee: data.baseFee,
                     deliveryFee: data.deliveryFee,
                     totalAmount: data.totalAmount,
-                    // status: data.status (se supone que esto no porque siempre seria "PENDING"),
                     wompiTransactionId: data.wompiTransactionId,
                     referenceCode: data.referenceCode,
                     

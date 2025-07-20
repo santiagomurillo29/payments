@@ -11,14 +11,17 @@ import { TransactionRepository } from './payments/adapters/outgoing/prisma/repos
 import { TransactionController } from './payments/adapters/incoming/rest/controller/transaction.controller';
 import { TransactionUseCase } from './payments/domain/usecase/transaction.usecase';
 import { WompiAdapter } from './payments/adapters/outgoing/wompi/wompi-adapter';
+import { DeliveriesController } from './payments/adapters/incoming/rest/controller/delivery.controller';
+import { DeliveryUseCase } from './payments/domain/usecase/delivery.usecase';
+import { DeliveryRepository } from './payments/adapters/outgoing/prisma/repository/delivery.repository';
 
 @Module({
   imports: [
     PrismaModule,
     HttpModule.register({ timeout: 5000 }),
   ],
-  controllers: [ProductsController, CustomerController, TransactionController],
-  providers: [ProductsUseCase, CustomerUseCase, TransactionUseCase,
+  controllers: [ProductsController, CustomerController, TransactionController, DeliveriesController],
+  providers: [ProductsUseCase, CustomerUseCase, TransactionUseCase, DeliveryUseCase,
     {
       provide: 'ProductRepoPort',
       useClass: ProductRepository,
@@ -34,6 +37,10 @@ import { WompiAdapter } from './payments/adapters/outgoing/wompi/wompi-adapter';
     {
       provide: 'WompiPort',
       useClass: WompiAdapter,
+    },
+    {
+      provide: 'DeliveryRepoPort',
+      useClass: DeliveryRepository,
     }
   ],
 })
