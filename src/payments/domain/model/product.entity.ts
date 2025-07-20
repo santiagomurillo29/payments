@@ -12,7 +12,7 @@ export class Product {
   }
 
   updateStock(stock: number): void {
-        if (stock < 0) throw new Error("Invalid stock");
-        this.stock = stock;
+    if (stock < 0) throw new Error("Invalid stock");
+      this.stock = stock;
   }
 }
